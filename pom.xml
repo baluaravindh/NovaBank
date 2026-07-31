@@ -30,6 +30,7 @@
     <modules>
         <module>services/common-library</module>
         <module>services/discovery-server</module>
+        <module>services/user-service</module>
     </modules>
 
     <dependencyManagement>

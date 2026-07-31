@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="common-library" />
         <module name="discovery-server" />
+        <module name="user-service" />
       </profile>
     </annotationProcessing>
   </component>
