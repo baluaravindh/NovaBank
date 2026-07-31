@@ -22,6 +22,8 @@
 
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
+        <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
+
         <spring.boot.version>3.5.4</spring.boot.version>
     </properties>
 
@@ -42,4 +44,15 @@
         </dependencies>
 
     </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
