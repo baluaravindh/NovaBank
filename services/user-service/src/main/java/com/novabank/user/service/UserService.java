@@ -1,5 +1,6 @@
 package com.novabank.user.service;
 
+import com.novabank.user.dto.request.ChangePasswordRequest;
 import com.novabank.user.dto.request.LoginRequest;
 import com.novabank.user.dto.request.UserProfileUpdateRequest;
 import com.novabank.user.dto.request.UserRegistrationRequest;
@@ -17,4 +18,6 @@ public interface UserService {
     UserRegistrationResponse getProfile(String email);
 
     UserRegistrationResponse updateProfile(String email, UserProfileUpdateRequest request);
+
+    String changePassword(String email, ChangePasswordRequest request);
 }

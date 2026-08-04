@@ -1,5 +1,6 @@
 package com.novabank.user.service.impl;
 
+import com.novabank.user.dto.request.ChangePasswordRequest;
 import com.novabank.user.dto.request.LoginRequest;
 import com.novabank.user.dto.request.UserProfileUpdateRequest;
 import com.novabank.user.dto.request.UserRegistrationRequest;
@@ -106,5 +107,28 @@ public class UserServiceImpl implements UserService {
         user.setMobileNumber(request.getMobileNumber());
         User updatedUser = userRepository.save(user);
         return userMapper.toResponse(updatedUser);
+    }
+
+    @Override
+    public String changePassword(String email, ChangePasswordRequest request) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(),  user.getPassword())) {
+            throw new InvalidCredentialsException("Invalid password.");
+        }
+
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+            throw new InvalidPasswordException("Current password and new password should not be the same.");
+        }
+
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new InvalidPasswordException("New password and confirm password do not match.");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        return "Password changed successfully.";
     }
 }

@@ -1,5 +1,6 @@
 package com.novabank.user.controller;
 
+import com.novabank.user.dto.request.ChangePasswordRequest;
 import com.novabank.user.dto.request.LoginRequest;
 import com.novabank.user.dto.request.UserProfileUpdateRequest;
 import com.novabank.user.dto.request.UserRegistrationRequest;
@@ -53,5 +54,16 @@ public class UserController {
                 .getAuthentication()
                 .getPrincipal().toString();
         return ResponseEntity.ok(userService.updateProfile(email, request));
+    }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<String> changePassword(
+            @Valid @RequestBody ChangePasswordRequest request) {
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal().toString();
+        String message = userService.changePassword(email, request);
+        return ResponseEntity.ok(message);
     }
 }
