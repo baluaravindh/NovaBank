@@ -1,5 +1,6 @@
 package com.novabank.user.entity;
 
+import com.novabank.user.enums.UserRole;
 import com.novabank.user.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -49,6 +50,10 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private UserRole role;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -56,6 +61,10 @@ public class User {
 
         if (status == null) {
             status = UserStatus.PENDING;
+        }
+
+        if(role == null) {
+            role = UserRole.CUSTOMER;
         }
     }
 

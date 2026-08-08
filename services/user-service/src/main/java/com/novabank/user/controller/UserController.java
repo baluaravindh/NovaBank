@@ -1,9 +1,6 @@
 package com.novabank.user.controller;
 
-import com.novabank.user.dto.request.ChangePasswordRequest;
-import com.novabank.user.dto.request.LoginRequest;
-import com.novabank.user.dto.request.UserProfileUpdateRequest;
-import com.novabank.user.dto.request.UserRegistrationRequest;
+import com.novabank.user.dto.request.*;
 import com.novabank.user.dto.response.LoginResponse;
 import com.novabank.user.dto.response.UserRegistrationResponse;
 import com.novabank.user.service.UserService;
@@ -11,12 +8,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -65,5 +61,29 @@ public class UserController {
                 .getPrincipal().toString();
         String message = userService.changePassword(email, request);
         return ResponseEntity.ok(message);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(
+            @Valid @RequestBody ForgotPasswordRequest request) {
+        return ResponseEntity.ok(userService.forgotPassword(request));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        String message = userService.resetPassword(request);
+        return ResponseEntity.ok(message);
+    }
+
+    @PutMapping("/{userId}/activate")
+    public ResponseEntity<String> activateUser(@PathVariable("userId") UUID userId) {
+        userService.activateUser(userId);
+        return ResponseEntity.ok("The user account has been activated.");
+    }
+
+    @PutMapping("/{userId}/block")
+    public ResponseEntity<String> blockUser(@PathVariable("userId") UUID userId) {
+        userService.blockUser(userId);
+        return ResponseEntity.ok("The user account has been blocked.");
     }
 }

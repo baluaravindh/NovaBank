@@ -25,12 +25,13 @@ public class JwtService {
         return Keys.hmacShaKeyFor(encodedKey);
     }
 
-    public String generateToken(String email) {
+    public String generateToken(String email, String role) {
         Date issuedAt = new Date();
         Date expirationDate = new Date(issuedAt.getTime() + expiration);
 
         return Jwts.builder()
                 .subject(email)
+                .claim("role", role)
                 .issuedAt(issuedAt)
                 .expiration(expirationDate)
                 .signWith(getSigningKey())
@@ -39,6 +40,10 @@ public class JwtService {
 
     public String extractEmail(String token) {
         return extractAllClaims(token).getSubject();
+    }
+
+    public String extractRole(String token) {
+        return extractAllClaims(token).get("role", String.class);
     }
 
     private Claims extractAllClaims(String token) {
@@ -54,9 +59,10 @@ public class JwtService {
         return expirationDate.before(new Date());
     }
 
-    public boolean validateToken(String token, String email) {
+    public boolean validateToken(String token, String email, String role) {
         String extractedEmail = extractEmail(token);
-        if (extractedEmail.equals(email) && !tokenExpired(token)) {
+        String extractedRole = extractRole(token);
+        if (extractedEmail.equals(email) && extractedRole.equals(role) && !tokenExpired(token)) {
             return true;
         }
         return false;
